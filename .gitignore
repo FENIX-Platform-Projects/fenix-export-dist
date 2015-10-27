@@ -1,3 +1,5 @@
 .idea/
 /target/
+/hq-dist/target/
 *.iml
+*.class

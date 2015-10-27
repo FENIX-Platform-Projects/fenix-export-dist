@@ -7,11 +7,9 @@
         <groupId>org.fao.ess</groupId>
         <version>1.0</version>
     </parent>
-
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>md-export</artifactId>
-
+    <artifactId>survey-export</artifactId>
     <packaging>jar</packaging>
 
     <properties>
@@ -117,7 +115,6 @@
             <version>${jackson.version}</version>
         </dependency>
 
-
         <!-- ITEXT -->
         <dependency>
             <groupId>com.itextpdf</groupId>
@@ -125,7 +122,9 @@
             <version>5.5.5</version>
         </dependency>
 
+
     </dependencies>
+
 
 
 </project>
