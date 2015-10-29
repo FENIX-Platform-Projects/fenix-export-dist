@@ -5,31 +5,61 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.fao.ess</groupId>
-    <artifactId>fenix-report-parent</artifactId>
+    <artifactId>fenix-reports-dist</artifactId>
     <packaging>pom</packaging>
     <version>1.0</version>
     <name>Fenix report parent</name>
 
     <modules>
-        <module>md-export</module>
-        <module>table-export</module>
-        <module>hq-dist</module>
         <module>survey-export</module>
+        <module>hq-dist</module>
     </modules>
 
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jackson.version>2.4.3</jackson.version>
+        <orient.version>2.1.0</orient.version>
+        <crossdomain.version>1.1.2</crossdomain.version>
+        <apachepoi.version>3.10.1</apachepoi.version>
+        <itext.version>5.4.5</itext.version>
+    </properties>
+
+
+    <distributionManagement>
+        <repository>
+            <id>FAO projects</id>
+            <name>FAO projects-releases</name>
+            <url>http://10.5.67.135/artifactory/libs-release-local</url>
+        </repository>
+    </distributionManagement>
+
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <configuration>
-                        <source>1.5</source>
-                        <target>1.5</target>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
+
+    <dependencies>
+        <!-- FENIX export core -->
+        <dependency>
+            <groupId>org.fao.ess</groupId>
+            <artifactId>fenix-export</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
 
 </project>

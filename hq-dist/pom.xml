@@ -3,24 +3,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                              http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.fao.ess</groupId>
-        <artifactId>fenix-report-parent</artifactId>
+        <artifactId>fenix-reports-dist</artifactId>
         <version>1.0</version>
     </parent>
-
     <artifactId>hq-dist</artifactId>
-    <packaging>war</packaging>
-    <name>simple-webapp Maven Webapp</name>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jackson.version>2.4.3</jackson.version>
-        <orient.version>1.7.8</orient.version>
-        <crossdomain.version>1.1.2</crossdomain.version>
-        <apachepoi.version>3.10.1</apachepoi.version>
-        <itext.version>5.4.5</itext.version>
-    </properties>
+    <packaging>war</packaging>
+
+    <name>FENIX-export-HQ-dist</name>
 
     <dependencies>
         <!-- J2EE -->
@@ -31,25 +24,18 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- FENIX EXPORT CORE -->
-        <dependency>
-            <groupId>org.fao.ess</groupId>
-            <artifactId>fenix-export</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
         <!-- FENIX PLUGIN METADATA export -->
         <dependency>
-            <groupId>org.fao.ess</groupId>
+            <groupId>org.fao.fenix</groupId>
             <artifactId>md-export</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
         <!-- FENIX PLUGIN TABLE export -->
         <dependency>
-            <groupId>org.fao.ess</groupId>
+            <groupId>org.fao.fenix</groupId>
             <artifactId>table-export</artifactId>
-            <version>1.0</version>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
 
         <!-- FENIX PLUGIN SURVEY export -->
@@ -59,13 +45,6 @@
             <version>1.0</version>
         </dependency>
 
-        <!-- Default plugins -->
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>9.3-1102-jdbc41</version>
-        </dependency>
-
         <!-- Cross domain support -->
         <dependency>
             <groupId>org.fao.fenix</groupId>
@@ -73,22 +52,6 @@
             <version>${crossdomain.version}</version>
         </dependency>
 
-        <!-- FENIX metadata standards -->
-        <dependency>
-            <groupId>org.fao.fenix</groupId>
-            <artifactId>fenix-commons-search</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.orientechnologies</groupId>
-            <artifactId>orientdb-object</artifactId>
-            <version>${orient.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.orientechnologies</groupId>
-            <artifactId>orientdb-client</artifactId>
-            <version>${orient.version}</version>
-        </dependency>
 
         <!-- Jackson custom configuration support -->
         <dependency>
