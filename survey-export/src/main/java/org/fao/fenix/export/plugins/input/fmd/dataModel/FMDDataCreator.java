@@ -407,6 +407,7 @@ public class FMDDataCreator {
                 if (objectProperty.getReference() == null) {
                     String orderObj = getOrderFromEntity(objectProperty.getOrder());
                     if (isReadyToPut(objectProperty)) {
+                        System.out.println(mdsdValue);
                         Object valueToPut  =((((ValueNode) mdsdValue).getNodeType().toString()).equals("NUMBER"))? mdsdValue: ((TextNode) mdsdValue).asText();
                         mapToFill.put(orderObj,
                                 new FMDescriptor(titleBean, objectProperty.getTitleToVisualize(), objectProperty.getDescription(),valueToPut));

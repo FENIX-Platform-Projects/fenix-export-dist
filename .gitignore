@@ -1,5 +1,6 @@
 .idea/
 /target/
+/survey-export/target/
 /hq-dist/target/
 *.iml
 *.class
