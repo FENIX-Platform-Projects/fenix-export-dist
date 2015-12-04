@@ -55,10 +55,9 @@ public class FMDLayoutCreator   {
 
     public void createCover(String title, PdfWriter writer) throws DocumentException, IOException {
 
-
         Paragraph titleLAbel = new Paragraph(TITLE_COVER, registrationFont.getCoverTitle());
 
-        Image logo = Image.getInstance(getClass().getClassLoader().getResource( IMG_PATH));
+        Image logo = Image.getInstance(Thread.currentThread().getContextClassLoader().getResource(IMG_PATH));
 
         Rectangle rect = writer.getBoxSize("art");
 

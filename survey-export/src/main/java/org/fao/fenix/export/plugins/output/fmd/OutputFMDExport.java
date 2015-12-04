@@ -59,7 +59,7 @@ public class OutputFMDExport extends Output {
 
         int pagenumber;
         String title;
-        private final static String IMAGE_PATH = "/images/logo/FAO_logo.png";
+        private final static String IMAGE_PATH = "images/logo/newLogos/FAO_logo.png";
         Image logo;
         Phrase titlePhrase;
         Font titleHeaderFont;

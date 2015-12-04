@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.*;
 import com.google.common.collect.Lists;
 import org.fao.fenix.commons.msd.dto.full.OjCode;
+import org.fao.fenix.export.plugins.input.fmd.dataModel.utils.FMDBlackListFields;
 import org.fao.fenix.export.plugins.input.fmd.dataModel.utils.FMDProperty;
 import org.fao.fenix.export.plugins.input.fmd.dataModel.utils.FMDescriptor;
 
@@ -62,34 +63,37 @@ public class FMDDataCreator {
                 Map.Entry<String, JsonNode> mapDsdTmp = properties.next();
                 String key = mapDsdTmp.getKey();
 
-                FMDProperty objectProperty = fillObjectProperty(Lists.newArrayList(mapDsdTmp.getValue().fields()).listIterator());
-                Object returnedValue = getReturnedValueFromObject(objectProperty, fmdBean, key);
+                if (!FMDBlackListFields.isAForbiddenField(key)) {
 
-                if (returnedValue != null) {
+                    FMDProperty objectProperty = fillObjectProperty(Lists.newArrayList(mapDsdTmp.getValue().fields()).listIterator());
+                    Object returnedValue = getReturnedValueFromObject(objectProperty, fmdBean, key);
 
-                    if (objectProperty.getTitleToVisualize() != null) {
+                    if (returnedValue != null) {
 
-                        // 1) IF THERE IS A TYPE
-                        if (mapDsdTmp.getValue().get(TYPE_FIELD) != null) {
+                        if (objectProperty.getTitleToVisualize() != null) {
 
-                            FMDescriptor value = new FMDescriptor(key, objectProperty.getTitleToVisualize(), objectProperty.getDescription());
-                            String order = getOrderFromEntity(mapDsdTmp.getValue());
+                            // 1) IF THERE IS A TYPE
+                            if (mapDsdTmp.getValue().get(TYPE_FIELD) != null) {
 
-                            // simple case: string type or number type
-                            if (isReadyToPut(objectProperty)) {
-                                this.metaDataCleaned.put(order, value.setValue(((TextNode) returnedValue).asText()));
-                            } else {
-                                this.metaDataCleaned.put(order, value.setValue(fillRecursive2(mapDsdTmp.getValue().fields(), returnedValue)));
+                                FMDescriptor value = new FMDescriptor(key, objectProperty.getTitleToVisualize(), objectProperty.getDescription());
+                                String order = getOrderFromEntity(mapDsdTmp.getValue());
+
+                                // simple case: string type or number type
+                                if (isReadyToPut(objectProperty)) {
+                                    this.metaDataCleaned.put(order, value.setValue(((TextNode) returnedValue).asText()));
+                                } else {
+                                    this.metaDataCleaned.put(order, value.setValue(fillRecursive(mapDsdTmp.getValue().fields(), returnedValue)));
+                                }
                             }
-                        }
-                        // 2) REF TYPE
-                        else if (mapDsdTmp.getValue().get(REF_FIELD) != null) {
+                            // 2) REF TYPE
+                            else if (mapDsdTmp.getValue().get(REF_FIELD) != null) {
 
-                            JsonNode msdRef = getMdsdObjectFromReference(mapDsdTmp.getValue().get(REF_FIELD).asText());
-                            String order = getOrderFromEntity(mapDsdTmp.getValue());
+                                JsonNode msdRef = getMdsdObjectFromReference(mapDsdTmp.getValue().get(REF_FIELD).asText());
+                                String order = getOrderFromEntity(mapDsdTmp.getValue());
 
-                            FMDescriptor tempVal = initDtoMDSD(mapDsdTmp.getValue(), key);
-                            this.metaDataCleaned.put(order, tempVal.setValue(fillRecursive2(msdRef.fields(), returnedValue)));
+                                FMDescriptor tempVal = initDtoMDSD(mapDsdTmp.getValue(), key);
+                                this.metaDataCleaned.put(order, tempVal.setValue(fillRecursive(msdRef.fields(), returnedValue)));
+                            }
                         }
                     }
                 }
@@ -98,106 +102,108 @@ public class FMDDataCreator {
     }
 
 
-    private Object fillRecursive2(Iterator<Map.Entry<String, JsonNode>> fields, Object returnedValue) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    private Object fillRecursive(Iterator<Map.Entry<String, JsonNode>> fields, Object returnedValue) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 
         Map<String, Object> tempMap = new TreeMap<String, Object>();
         ListIterator<Map.Entry<String, JsonNode>> listBack = Lists.newArrayList(fields).listIterator();
         FMDProperty resultObj = fillObjectProperty(listBack);
         String type = resultObj.getType();
 
-        if (type != null) {
-            /** STRING OR NUMBER**/
 
-            if (type.equals(STRING_TYPE) || type.equals(NUMBER_TYPE)) {
-                Object valueStringType = invokeMethodByReflection(resultObj.getTitleBean(), returnedValue, false);
-                if (valueStringType != null && !valueStringType.toString().equals("")) {
-                    tempMap.put(resultObj.getOrder(), new FMDescriptor(resultObj.getTitleBean(), resultObj.getTitleToVisualize(), resultObj.getDescription(), valueStringType));
-                    return tempMap;
-                }
-            }
 
-            /** OBJECT **/
+            if (type != null) {
+                /** STRING OR NUMBER**/
 
-            else if (type.equals(OBJECT_TYPE)) {
-
-                // 1) PROPERTIES
-                if (resultObj.getProperties() != null) {
-                    ArrayList<Map.Entry<String, JsonNode>> itProperties = (ArrayList<Map.Entry<String, JsonNode>>) resultObj.getProperties();
-                    handleProperties(tempMap, itProperties, returnedValue);
-                }
-
-                // 2) PATTERN PROPERTIES
-                else if (resultObj.getProperties() == null && resultObj.getPatternProperties() != null) {
-                    Object valueObjPatternType = invokeMethodByReflection(resultObj.getTitleBean(), returnedValue, true);
-                    if (valueObjPatternType != null) {
-
-                        if (resultObj.getPatternProperties().equals(STRING_TYPE)) {
-                            String orderObj = getOrderFromEntity(resultObj.getOrder());
-                            tempMap.put(
-                                    orderObj,
-                                    new FMDescriptor(resultObj.getTitleBean(),
-                                            resultObj.getTitleToVisualize(),
-                                            resultObj.getDescription(),
-                                            valueObjPatternType));
-                        } else {
-                            // TODO(FREEZED): there is not a type different from string
-                            System.out.println("here!");
-
-                        }
-                    }
-                }
-
-                // 3) REF PROPERTY
-                else if (resultObj.getProperties() == null && resultObj.getPatternProperties() == null && resultObj.getReference() != null) {
-                    handleReferences(resultObj.getReference(), resultObj, tempMap, returnedValue, false);
-                    return tempMap;
-                }
-            }
-
-            /** ARRAY**/
-
-            else if (type.equals(ARRAY_TYPE)) {
-
-                ArrayList<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
-                ArrayList<Object> values = (ArrayList<Object>) returnedValue;
-
-                JsonNode items = ((ObjectNode) resultObj.getItems()).deepCopy();
-                if (items.get(TYPE_FIELD) != null) {
-                    if (items.get(TYPE_FIELD).asText().equals(STRING_TYPE)) {
-                        String orderGlobal = getOrderFromEntity(resultObj.getOrder());
-
-                        for (int arrCounter = 0; arrCounter < values.size(); arrCounter++) {
-                            Map<String, Object> tmp = new TreeMap<String, Object>();
-                            String order = getOrderFromEntity(resultObj.getOrder());
-                            tmp.put(order, values.get(arrCounter));
-                            result.add(tmp);
-                        }
-                        tempMap.put(orderGlobal, result);
-                    }
-                } else if (items.get(REF_FIELD) != null) {
-                    String orderGlobal = getOrderFromEntity(resultObj.getOrder());
-
-                    String ref = items.get(REF_FIELD).asText();
-                    String[] refSplitted = ref.substring(2).split("/");
-
-                    // OJCODE case
-                    if (refSplitted[refSplitted.length - 1].equals(OJCODE_TYPE)) {
-                        tempMap.put(orderGlobal, new FMDescriptor(
-                                refSplitted[refSplitted.length - 1],
-                                resultObj.getTitleToVisualize(),
-                                resultObj.getDescription(),
-                                fillOjCode((ArrayList<OjCode>) returnedValue)));
-                    } else {
-                        handleReferences(items.get(REF_FIELD).asText(), null, tempMap, returnedValue, true);
+                if (type.equals(STRING_TYPE) || type.equals(NUMBER_TYPE)) {
+                    Object valueStringType = invokeMethodByReflection(resultObj.getTitleBean(), returnedValue, false);
+                    if (valueStringType != null && !valueStringType.toString().equals("")) {
+                        tempMap.put(resultObj.getOrder(), new FMDescriptor(resultObj.getTitleBean(), resultObj.getTitleToVisualize(), resultObj.getDescription(), valueStringType));
                         return tempMap;
                     }
                 }
+
+                /** OBJECT **/
+
+                else if (type.equals(OBJECT_TYPE)) {
+
+                    // 1) PROPERTIES
+                    if (resultObj.getProperties() != null) {
+                        ArrayList<Map.Entry<String, JsonNode>> itProperties = (ArrayList<Map.Entry<String, JsonNode>>) resultObj.getProperties();
+                        handleProperties(tempMap, itProperties, returnedValue);
+                    }
+
+                    // 2) PATTERN PROPERTIES
+                    else if (resultObj.getProperties() == null && resultObj.getPatternProperties() != null) {
+                        Object valueObjPatternType = invokeMethodByReflection(resultObj.getTitleBean(), returnedValue, true);
+                        if (valueObjPatternType != null) {
+
+                            if (resultObj.getPatternProperties().equals(STRING_TYPE)) {
+                                String orderObj = getOrderFromEntity(resultObj.getOrder());
+                                tempMap.put(
+                                        orderObj,
+                                        new FMDescriptor(resultObj.getTitleBean(),
+                                                resultObj.getTitleToVisualize(),
+                                                resultObj.getDescription(),
+                                                valueObjPatternType));
+                            } else {
+                                // TODO(FREEZED): there is not a type different from string
+                                System.out.println("here!");
+
+                            }
+                        }
+                    }
+
+                    // 3) REF PROPERTY
+                    else if (resultObj.getProperties() == null && resultObj.getPatternProperties() == null && resultObj.getReference() != null) {
+                        handleReferences(resultObj.getReference(), resultObj, tempMap, returnedValue, false);
+                        return tempMap;
+                    }
+                }
+
+                /** ARRAY**/
+
+                else if (type.equals(ARRAY_TYPE)) {
+
+                    ArrayList<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+                    ArrayList<Object> values = (ArrayList<Object>) returnedValue;
+
+                    JsonNode items = ((ObjectNode) resultObj.getItems()).deepCopy();
+                    if (items.get(TYPE_FIELD) != null) {
+                        if (items.get(TYPE_FIELD).asText().equals(STRING_TYPE)) {
+                            String orderGlobal = getOrderFromEntity(resultObj.getOrder());
+
+                            for (int arrCounter = 0; arrCounter < values.size(); arrCounter++) {
+                                Map<String, Object> tmp = new TreeMap<String, Object>();
+                                String order = getOrderFromEntity(resultObj.getOrder());
+                                tmp.put(order, values.get(arrCounter));
+                                result.add(tmp);
+                            }
+                            tempMap.put(orderGlobal, result);
+                        }
+                    } else if (items.get(REF_FIELD) != null) {
+                        String orderGlobal = getOrderFromEntity(resultObj.getOrder());
+
+                        String ref = items.get(REF_FIELD).asText();
+                        String[] refSplitted = ref.substring(2).split("/");
+
+                        // OJCODE case
+                        if (refSplitted[refSplitted.length - 1].equals(OJCODE_TYPE)) {
+                            tempMap.put(orderGlobal, new FMDescriptor(
+                                    refSplitted[refSplitted.length - 1],
+                                    resultObj.getTitleToVisualize(),
+                                    resultObj.getDescription(),
+                                    fillOjCode((ArrayList<OjCode>) returnedValue)));
+                        } else {
+                            handleReferences(items.get(REF_FIELD).asText(), null, tempMap, returnedValue, true);
+                            return tempMap;
+                        }
+                    }
+                }
+            } else {
+                if (resultObj.getReference() != null) {
+                    handleReferences(resultObj.getReference(), resultObj, tempMap, returnedValue, false);
+                }
             }
-        } else {
-            if (resultObj.getReference() != null) {
-                handleReferences(resultObj.getReference(), resultObj, tempMap, returnedValue, false);
-            }
-        }
 
         return tempMap;
 
@@ -401,13 +407,12 @@ public class FMDDataCreator {
 
             Object mdsdValue = getReturnedValueFromObject(objectProperty, returnedValue, titleBean);
 
-            if (mdsdValue != null) {
+            if (mdsdValue != null /*&&  !FMDBlackListFields.isAForbiddenField(objectProperty.getTitleBean())*/) {
 
                 // if there is not a reference
                 if (objectProperty.getReference() == null) {
                     String orderObj = getOrderFromEntity(objectProperty.getOrder());
                     if (isReadyToPut(objectProperty)) {
-                        System.out.println(mdsdValue);
                         Object valueToPut  =((((ValueNode) mdsdValue).getNodeType().toString()).equals("NUMBER"))? mdsdValue: ((TextNode) mdsdValue).asText();
                         mapToFill.put(orderObj,
                                 new FMDescriptor(titleBean, objectProperty.getTitleToVisualize(), objectProperty.getDescription(),valueToPut));
@@ -421,7 +426,7 @@ public class FMDDataCreator {
                         }
                         mapToFill.put(orderObj, new FMDescriptor(titleBean, objectProperty.getTitleToVisualize(), objectProperty.getDescription(), values));
                     } else {
-                        mapToFill.put(orderObj, new FMDescriptor(titleBean, objectProperty.getTitleToVisualize(), objectProperty.getDescription(), fillRecursive2(itProperties.get(k).getValue().fields(), mdsdValue)));
+                        mapToFill.put(orderObj, new FMDescriptor(titleBean, objectProperty.getTitleToVisualize(), objectProperty.getDescription(), fillRecursive(itProperties.get(k).getValue().fields(), mdsdValue)));
                     }
                 }
                 // if it is a reference
@@ -455,7 +460,7 @@ public class FMDDataCreator {
 
 
     private Object invokeEnumByReflection(Object instanceToUse) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-
+/*
         Object resultTemp = null;
         Object result = null;
         String methodString = null;
@@ -471,9 +476,11 @@ public class FMDDataCreator {
 
         if (result == null) {
             result = methodMap.invoke(resultTemp, (Object) DEFAULT_LANG);
-        }
+        }*/
 
-        return result.toString();
+
+
+        return instanceToUse.toString();
     }
 
 

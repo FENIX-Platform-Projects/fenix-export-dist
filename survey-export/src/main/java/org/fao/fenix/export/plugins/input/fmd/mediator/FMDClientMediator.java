@@ -41,8 +41,6 @@ public class FMDClientMediator {
         if (uid != null) {
             String url = URLDATA_FIRST_PART + uid + URLDATA_APPEND_PART;
 
-            System.out.println(url);
-
             Response response = ClientBuilder.newBuilder().build().target(url).request().get();
             try {
                 result = new ObjectMapper().readValue(response.readEntity(String.class), JsonNode.class);
