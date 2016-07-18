@@ -13,6 +13,7 @@
     <modules>
         <module>survey-export</module>
         <module>hq-dist</module>
+        <module>amis-supply-demand</module>
     </modules>
 
     <properties>
@@ -23,6 +24,13 @@
         <itext.version>5.5.5</itext.version>
         <fenix-export.version>1.0-SNAPSHOT</fenix-export.version>
         <resteasy.version>3.0.6.Final</resteasy.version>
+        <jdbc.postgres.version>9.3-1102-jdbc41</jdbc.postgres.version>
+        <j2ee.version>7.0</j2ee.version>
+        <junit.version>4.10</junit.version>
+        <apachepoi.version>3.10.1</apachepoi.version>
+        <log4j.version>1.2.17</log4j.version>
+
+
     </properties>
 
 
