@@ -5,12 +5,24 @@
     "data": []
   },
   "input": {
-    "plugin": "inputAMISSupply",
-    "config": {}
+    "plugin": "asdsad",
+    "config": {
+      "filters":{
+        "countries":[],
+        "items":[],
+        "datasources":[]
+      },
+      "domain":"",
+      "select":["1","2"],
+      "orderBy":["2","3"],
+      "from":["2000"],
+      "valueType":"TOTAL"
+    }
   },
   "output": {
     "plugin": "outputAMISSupply",
     "config": {
+
     }
   }
 }

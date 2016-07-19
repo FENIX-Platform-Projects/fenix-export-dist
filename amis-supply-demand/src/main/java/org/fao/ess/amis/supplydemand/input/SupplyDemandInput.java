@@ -12,20 +12,23 @@ public class SupplyDemandInput extends Input {
     @Override
     public void init(Map<String, Object> map, Resource resource) {
 
+
+
+
+    }
+
+    @Override
+    public CoreData getResource() {
+
+        System.out.println("here");
+
+        return null;
+    }
+
+    public void exampleQuery () {
         ConnectionManager connectionManager = new ConnectionManager();
 
-
         connectionManager.init();
-
-
-
-        System.out.println("Init input");
-
-        for(String s: map.keySet()){
-            if(map.get(s)!= null)
-                System.out.println("value: "+map.get(s));
-        }
-
 
         String query = "select count(*) as c from amis_all_datasources";
 
@@ -38,11 +41,11 @@ public class SupplyDemandInput extends Input {
         try {
             statement = connection.createStatement();
 
-             rs = statement.executeQuery(query);
+            rs = statement.executeQuery(query);
 
             while (rs.next()) {
-                       System.out.println(rs.getString("c"));
-                     }
+                System.out.println(rs.getString("c"));
+            }
 
             rs.close();
             statement.close();
@@ -52,13 +55,5 @@ public class SupplyDemandInput extends Input {
             e.printStackTrace();
         }
 
-    }
-
-    @Override
-    public CoreData getResource() {
-
-        System.out.println("here");
-
-        return null;
     }
 }
