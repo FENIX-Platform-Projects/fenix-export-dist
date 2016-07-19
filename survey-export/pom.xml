@@ -4,30 +4,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-<!--
-    <profiles>
-        <profile>
-            <id>jboss</id>
-
-            <dependencies>
-
-                &lt;!&ndash; Rest easy &ndash;&gt;
-                <dependency>
-                    <groupId>org.jboss.resteasy</groupId>
-                    <artifactId>resteasy-jaxrs</artifactId>
-                    <version>${resteasy.version}</version>
-                    <scope>provided</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.jboss.resteasy</groupId>
-                    <artifactId>resteasy-jackson-provider</artifactId>
-                    <version>${resteasy.version}</version>
-                    <scope>provided</scope>
-                </dependency>
-            </dependencies>
-        </profile>
-    </profiles>
--->
 
     <parent>
         <artifactId>fenix-reports-dist</artifactId>
@@ -48,17 +24,10 @@
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
-            <version>7.0</version>
+            <version>${j2ee.version}</version>
             <scope>provided</scope>
         </dependency>
 
-
-        <!-- &lt;!&ndash; Default plugins &ndash;&gt;
-         <dependency>
-             <groupId>org.postgresql</groupId>
-             <artifactId>postgresql</artifactId>
-             <version>9.3-1102-jdbc41</version>
-         </dependency>-->
 
         <!-- FENIX metadata standards -->
         <dependency>
@@ -100,28 +69,6 @@
             <version>${resteasy.version}</version>
             <scope>provided</scope>
         </dependency>
-
-<!--
-        <dependency>
-            <groupId>javax.ws.rs</groupId>
-            <artifactId>javax.ws.rs-api</artifactId>
-            <version>2.0.1</version>
-        </dependency>-->
-
-        <!--<dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-jaxrs</artifactId>
-            <version>${resteasy.version}</version>
-            <scope>provided</scope>
-        </dependency>-->
-<!--
-        <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-jackson-provider</artifactId>
-            <version>${resteasy.version}</version>
-            <scope>provided</scope>
-        </dependency>-->
-
 
     </dependencies>
 

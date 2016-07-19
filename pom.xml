@@ -11,9 +11,10 @@
     <name>Fenix report parent</name>
 
     <modules>
-        <module>survey-export</module>
         <module>hq-dist</module>
+        <module>survey-export</module>
         <module>amis-supply-demand</module>
+
     </modules>
 
     <properties>

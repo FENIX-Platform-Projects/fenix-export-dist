@@ -1,0 +1,16 @@
+{
+  "resource": {
+    "metadata": {
+    },
+    "data": []
+  },
+  "input": {
+    "plugin": "inputAMISSupply",
+    "config": {}
+  },
+  "output": {
+    "plugin": "outputAMISSupply",
+    "config": {
+    }
+  }
+}
