@@ -34,14 +34,12 @@ public class TestClass {
 
         // set Items
         Map<String, String> items = new HashMap<>();
-        items.put("label","Maize");
-        items.put("code","5");
+        items.put("5","Maize");
         qvo.setItems(items);
 
         //areas
         Map<String, String> areas = new HashMap<>();
-        areas.put("label","Argentina");
-        items.put("code","12");
+        areas.put("12","Argentina");
         qvo.setAreas(areas);
 
         // set OrderBy
@@ -50,14 +48,18 @@ public class TestClass {
         qvo.setFoodBalanceElements(createQVOList(1));
         // set setOtherFoodBalanceElements
         qvo.setOtherFoodBalanceElements(createQVOList(2));
+        LinkedHashMap<String, String> itys = new LinkedHashMap<>();
 
-        qvo.setItyElements(new LinkedHashMap<String, String>());
+        itys.put("13","Feed Use - Million tonnes");
+        itys.put("15","Other Uses - Million tonnes");
+        itys.put("10","Exports (NMY) - Million tonnes");
+        qvo.setItyElements(itys);
         // set setCountryDates
         qvo.setCountryDates(setCountryDates());
         // set getCountriesInternationalTradeYear
         qvo.setCountriesInternationalTradeYear(getCountriesInternationalTradeYear());
         // xLabel
-        qvo.setxLabel("PRODUCT");
+        qvo.setxLabel("COUNTRY");
         Map<String,String> databases = new HashMap<String, String>();
         databases.put("CBS","FAO-AMIS");
         qvo.setDatabases(databases);
