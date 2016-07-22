@@ -1,0 +1,20 @@
+{
+  "resource": {
+    "metadata": {
+    },
+    "data": []
+  },
+  "input": {
+    "plugin": "inputAMISSupply",
+    "config": {}
+  },
+  "output": {
+    "plugin": "outputAMISSupply",
+    "config": {
+      "a1":"whatever",
+      "a2":{
+        "a21":"ciao"
+        }
+    }
+  }
+}

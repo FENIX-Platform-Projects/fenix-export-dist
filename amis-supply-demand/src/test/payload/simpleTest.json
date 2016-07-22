@@ -1,28 +1,59 @@
 {
-  "resource": {
-    "metadata": {
+  "input":{
+    "config":{
+      "orderbys":[
+        "D.database",
+        "D.region_name",
+        "D.product_name",
+        "D.element_name",
+        "D.year_label"
+      ],
+      "valuetype":"'TOTAL'",
+      "items":[
+        {
+          "label":"Maize",
+          "code":"5"
+        }
+      ],
+      "selects":[
+        "D.database",
+        "D.region_name",
+        "D.product_name",
+        "D.element_code",
+        "D.year_label",
+        "ROUND(CAST(D.value as numeric), 2) "
+      ],
+      "databases":[
+        {
+          "label":"FAO-CBS",
+          "code":"CBS"
+        }
+      ],
+      "xlabel":"COUNTRY",
+      "froms":[
+        "amis_all_datasources "
+      ],
+      "areas":[
+        {
+          "label":"Argentina",
+          "code":"12"
+        }
+      ]
     },
-    "data": []
+    "plugin":"inputAMISSupply"
   },
-  "input": {
-    "plugin": "asdsad",
-    "config": {
-      "filters":{
-        "countries":[],
-        "items":[],
-        "datasources":[]
-      },
-      "domain":"",
-      "select":["1","2"],
-      "orderBy":["2","3"],
-      "from":["2000"],
-      "valueType":"TOTAL"
-    }
-  },
-  "output": {
-    "plugin": "outputAMISSupply",
-    "config": {
+  "resource":{
+    "data":[
+
+    ],
+    "metadata":{
 
     }
+  },
+  "output":{
+    "config":{
+
+    },
+    "plugin":"outputAMISSupply"
   }
 }
