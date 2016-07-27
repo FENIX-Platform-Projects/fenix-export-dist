@@ -8,6 +8,9 @@ import java.util.Map;
 public class AMISSupplyDemandUtils {
 
 
+    private static AmisSupplyDemandExcelUtilsNew excelUtilsNew;
+
+
     public static String convertMapItemLabelsToString(Map<String, String> mapItems){
         StringBuilder builder = new StringBuilder();
         int i = 0;

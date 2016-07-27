@@ -3,20 +3,22 @@ package org.fao.ess.amis.supplydemand.excel;
 
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.*;
 
 import java.util.Map;
 
 public class AMISSupplyDemandExcelUtils {
 
-    public static HSSFFont boldFont;
-    public static HSSFFont italicFont;
-    public static HSSFFont italicisedSmallFont;
-    public static HSSFFont whiteFont;
-    public static HSSFFont bigBoldFont;
-    public static HSSFFont smallFont;
-    public static HSSFFont boldSmallFont;
+    public static Font boldFont;
+    public static Font italicFont;
+    public static Font italicisedSmallFont;
+    public static Font whiteFont;
+    public static Font bigBoldFont;
+    public static Font smallFont;
+    public static Font boldSmallFont;
+
+
+
 
 
     public static String convertMapItemLabelsToString(Map<String, String> mapItems){
@@ -58,8 +60,8 @@ public class AMISSupplyDemandExcelUtils {
     }
 
 
-    public static int createEmptyRow(int rowCounter, HSSFSheet sheet, HSSFWorkbook workbook){
-        HSSFRow row = sheet.createRow(rowCounter++);
+    public static int createEmptyRow(int rowCounter, Sheet sheet, HSSFWorkbook workbook){
+        Row row = sheet.createRow(rowCounter++);
         row.createCell((short) 0).setCellValue("");
         row.createCell((short) 1).setCellValue("");
 
@@ -112,7 +114,7 @@ public class AMISSupplyDemandExcelUtils {
 
     public static HSSFCellStyle getBlueCellStyle(HSSFWorkbook workbook){
         HSSFCellStyle cellStyle = workbook.createCellStyle();
-        cellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND );
+        cellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
         cellStyle.setFillForegroundColor(HSSFColor.BLUE.index);
         getBordersStyle(workbook, cellStyle);
 
@@ -196,7 +198,7 @@ public class AMISSupplyDemandExcelUtils {
     }
 
 
-    public static void initializeHSSFFontStyles(HSSFWorkbook workbook){
+    public static void initializeFontStyles(HSSFWorkbook workbook){
         boldFont = workbook.createFont();
         boldFont.setBoldweight(Font.BOLDWEIGHT_BOLD);
 
@@ -224,26 +226,26 @@ public class AMISSupplyDemandExcelUtils {
     }
 
 
-    public static int createNoAvailableDataTable(int rowCounter, HSSFSheet sheet, HSSFWorkbook workbook, String title){
+    public static int createNoAvailableDataTable(int rowCounter, Sheet sheet, HSSFWorkbook workbook, String title){
         rowCounter = AMISSupplyDemandExcelUtils.createEmptyRow(rowCounter, sheet, workbook);
 
         //Title Row
         rowCounter = createHeadingRow(rowCounter, sheet, workbook, title, null);
 
-        HSSFRow row = sheet.createRow(rowCounter++);
-        HSSFCell cell = row.createCell((short) 0);
+        Row row = sheet.createRow(rowCounter++);
+        Cell cell = row.createCell((short) 0);
         cell.setCellStyle(AMISSupplyDemandExcelUtils.getLeftAlignmentStyle(workbook));
         cell.setCellValue("No Data Available");
 
         return rowCounter;
     }
 
-    public static int createHeadingRow(int rowCounter, HSSFSheet sheet,  HSSFWorkbook workbook, String header, String headerValue){
-        HSSFRow row = sheet.createRow(rowCounter++);
+    public static int createHeadingRow(int rowCounter, Sheet sheet, HSSFWorkbook workbook, String header, String headerValue){
+        Row row = sheet.createRow(rowCounter++);
         // LOGGER.info("----------- createHeadingRow .... START ");
 
         if(header != null && headerValue==null){
-            HSSFCell cell = row.createCell((short) 0);
+            Cell cell = row.createCell((short) 0);
             cell.setCellStyle(AMISSupplyDemandExcelUtils.getBigBoldTextCellStyle(workbook, null));
             cell.setCellValue(header);
 
@@ -252,7 +254,7 @@ public class AMISSupplyDemandExcelUtils {
         else {
             // LOGGER.info("----------- header  "+header);
 
-            HSSFCell cell = row.createCell((short) 0);
+            Cell cell = row.createCell((short) 0);
             cell.setCellStyle(AMISSupplyDemandExcelUtils.getRightAlignmentStyle(workbook));
             cell.setCellValue(header);
 

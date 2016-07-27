@@ -40,6 +40,7 @@ public class TestClass {
         //areas
         Map<String, String> areas = new HashMap<>();
         areas.put("12","Argentina");
+        areas.put("37","Brazil");
         qvo.setAreas(areas);
 
         // set OrderBy
@@ -119,6 +120,7 @@ public class TestClass {
 
                 secondValues.put("2016/17",values);
                 third.put("Argentina", secondValues);
+                third.put("Brazil", secondValues);
                 result.put("CBS", third);
                 break;
 
@@ -130,6 +132,7 @@ public class TestClass {
                 values.put( "4",(Double)21.5);
                 secondValues.put("2016/17",values);
                 third.put("Argentina", secondValues);
+                third.put("Brazil", secondValues);
                 result.put("CBS", third);
 
                 break;
@@ -139,6 +142,7 @@ public class TestClass {
                 values.put("8",(Double)16.4);
                 secondValues.put("2016/17",values);
                 third.put("Argentina", secondValues);
+                third.put("Brazil", secondValues);
                 result.put("CBS", third);
                 break;
         }
@@ -206,7 +210,7 @@ public class TestClass {
         LinkedHashMap<String, String> second = new LinkedHashMap<>();
         second.put("2016/17","2016-01-01");
         result.put("Argentina",second);
-
+        result.put("Brazil",second);
         return result;
     }
 
@@ -217,6 +221,7 @@ public class TestClass {
         String[] list = {"July/June", "2015/16", "July 2015 to June 2016"};
         LinkedList<String> last = new LinkedList<>(Arrays.asList(list));
         third.put("Argentina",last);
+        third.put("Brazil",last);
         second.put("5",third);
         result.put("CBS",second);
         return result;
