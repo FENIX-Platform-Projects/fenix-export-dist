@@ -2,6 +2,7 @@ package org.fao.ess.amis.supplydemand.excel;
 
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.fao.ess.amis.supplydemand.dao.AMISConstants;
@@ -985,16 +986,18 @@ public class AMISSupplyDemandExcel {
                 elementName = elementName.toUpperCase();
                 elementCellStyle.cloneStyleFrom(utils.getBoldTextCellStyle(workbook, elementCellStyle));
             }
+
+            else if (otherUsesPresent && FOOD_BALANCE_ELEMENTS_MORE_INDENTED.contains(elementCode) ) {
+                elementCellStyle =utils.getSmallItalicGreyCellStyle();
+                elementName = "          " + elementName;
+            }
             //Apply first indentation
             else if (FOOD_BALANCE_ELEMENTS_INDENTED.contains(elementCode)) {
                 elementCellStyle = utils.getGreyItalicCellStyle();
                 elementName = "     " + elementName;
             }
             //Append a second indentation
-            else if (FOOD_BALANCE_ELEMENTS_MORE_INDENTED.contains(elementCode) && otherUsesPresent) {
-                elementCellStyle.setFont(utils.getItalicisedSmallFont());
-                elementName = "          " + elementName;
-            }
+
             else {
                 elementCellStyle = utils.getGreyNormalCellStyle();
             }
@@ -1009,11 +1012,12 @@ public class AMISSupplyDemandExcel {
 
             //Unit
             cell = row.createCell((short) 1);
+            cell.setCellValue(elementUnit);
 
-            cell.setCellStyle(utils.getBordersStyle(workbook, null));
+            cell.setCellStyle(utils.getBasicWithBordersOnRegion());
             cell.getCellStyle().setVerticalAlignment(CellStyle.VERTICAL_CENTER);
             cell.getCellStyle().setAlignment(CellStyle.ALIGN_CENTER);
-            cell.setCellValue(elementUnit);
+
             int j = 2;
             for (String dateCode : datesMap.keySet()) {
                 // String date = datesMap.get(dateCode);
@@ -1060,10 +1064,7 @@ public class AMISSupplyDemandExcel {
                                 cell.setCellStyle(utils.getBigBoldCellStyle());
                             } else {
 
-                                if (FOOD_BALANCE_ELEMENTS_INDENTED.contains(elementCode)) {
-                                    cell.setCellStyle(utils.getItalicCellStyle());
-                                }
-                                else if (FOOD_BALANCE_ELEMENTS_MORE_INDENTED.contains(elementCode)) {
+                                if (FOOD_BALANCE_ELEMENTS_MORE_INDENTED.contains(elementCode)) {
                                     //if other uses elements is present then level one elements in italics
                                     // and level two elements in italics and small text
                                     if (otherUsesPresent) {
@@ -1071,7 +1072,12 @@ public class AMISSupplyDemandExcel {
                                     } else {
                                         cell.setCellStyle(utils.getItalicCellStyle());
                                     }
-                                } else {
+                                }
+
+                                else if (FOOD_BALANCE_ELEMENTS_INDENTED.contains(elementCode)) {
+                                    cell.setCellStyle(utils.getItalicCellStyle());
+                                }
+                                else {
                                     cell.setCellStyle(utils.getNormalCellStyle());
                                 }
 
@@ -1187,25 +1193,25 @@ public class AMISSupplyDemandExcel {
 
            if( qvo.getCountriesNationalMarketingYear().get(datasource)!=null && qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode)!=null  &&!qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode).isEmpty())   {
                 if(qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode).get(countryLabel)!=null)
-                 t = AMISSupplyDemandNotes.createMarketingTradeNoteRow(t, sheet, workbook, AMISSupplyDemandNotes.buildNote(qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode).get(countryLabel).get(0), qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode).get(countryLabel).get(1), qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode).get(countryLabel).get(2), qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode).get(countryLabel).get(3), "NMY"));
+                 t = createMarketingTradeNoteRow(t, sheet, workbook, AMISSupplyDemandNotes.buildNote(qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode).get(countryLabel).get(0), qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode).get(countryLabel).get(1), qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode).get(countryLabel).get(2), qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode).get(countryLabel).get(3), "NMY"));
 
             }
             //FAO-CBS Rice Note
             if (qvo.getxLabel().equals("DATASOURCE")) {
                 if (AMISSupplyDemandUtils.itemsContainRice(qvo) && datasource.equals(AMISConstants.CBS.name())) {
                     sheet.addMergedRegion(new CellRangeAddress(t, (short) 0, t, (short) 15));
-                    t = AMISSupplyDemandNotes.createInformationRow(t, sheet, workbook, CBS_RICE_NOTE, "", false, 0);
+                    t = createInformationRow(t, sheet, workbook, CBS_RICE_NOTE, "", false, 0);
                 }
             } else if (qvo.getxLabel().equals("COUNTRY")) {
                 if (AMISSupplyDemandUtils.itemsContainRice(qvo) && qvo.getDatabases().containsKey(AMISConstants.CBS.name())) {
                     sheet.addMergedRegion(new CellRangeAddress(t, (short) 0, t, (short) 15));
-                    t = AMISSupplyDemandNotes.createInformationRow(t, sheet, workbook, CBS_RICE_NOTE, "", false, 0);
+                    t = createInformationRow(t, sheet, workbook, CBS_RICE_NOTE, "", false, 0);
                 }
             } else if (qvo.getxLabel().equals("PRODUCT")) {
                 LOGGER.info("Rice has been selected " + AMISSupplyDemandUtils.itemsContainRice(qvo) + " | datasource = " + datasource);
                 if (country.contains("Rice") && qvo.getDatabases().containsKey(AMISConstants.CBS.name())) {
                     sheet.addMergedRegion(new CellRangeAddress(t, (short) 0, t, (short) 15));
-                    t = AMISSupplyDemandNotes.createInformationRow(t, sheet, workbook, CBS_RICE_NOTE, "", false, 0);
+                    t = createInformationRow(t, sheet, workbook, CBS_RICE_NOTE, "", false, 0);
                 }
             }
 
@@ -1260,7 +1266,7 @@ public class AMISSupplyDemandExcel {
 
             if (qvo.getCountriesInternationalTradeYear().get(datasource) != null && qvo.getCountriesInternationalTradeYear().get(datasource).get(productCode) != null && !qvo.getCountriesInternationalTradeYear().get(datasource).get(productCode).isEmpty()) {
                 if (qvo.getCountriesInternationalTradeYear().get(datasource).get(productCode).get(countryLabel) != null)
-                    t = AMISSupplyDemandNotes.createMarketingTradeNoteRow(t, sheet, workbook, AMISSupplyDemandNotes.buildNote(qvo.getCountriesInternationalTradeYear().get(datasource).get(productCode).get(countryLabel).get(0), qvo.getCountriesInternationalTradeYear().get(datasource).get(productCode).get(countryLabel).get(1), qvo.getCountriesInternationalTradeYear().get(datasource).get(productCode).get(countryLabel).get(2), "ITY"));
+                    t = createMarketingTradeNoteRow(t, sheet, workbook, AMISSupplyDemandNotes.buildNote(qvo.getCountriesInternationalTradeYear().get(datasource).get(productCode).get(countryLabel).get(0), qvo.getCountriesInternationalTradeYear().get(datasource).get(productCode).get(countryLabel).get(1), qvo.getCountriesInternationalTradeYear().get(datasource).get(productCode).get(countryLabel).get(2), "ITY"));
 
             }
 
@@ -1319,16 +1325,14 @@ public class AMISSupplyDemandExcel {
         // LOGGER.info("buildUnbalancedRow: START ..... elementsMap.get(35) "+elementsMap.get("35"));
         //LOGGER.info("buildUnbalancedRow: START ..... elementsMap.get(19) "+elementsMap.get("19"));
 
-
+        DataFormat dataFormat = workbook.createDataFormat();
         // Total Utilization (35) - Supply (19)
         String[] totUtilNameUnit = elementsMap.get("35").split("-");
         String totalUtilName = totUtilNameUnit[0];
         String totalUtilUnit = totUtilNameUnit[1];
 
-
         String[] supplyNameUnit = elementsMap.get("19").split("-");
         String supplyName = supplyNameUnit[0];
-
 
         //Unbalanced Row
         Row unbalancedRow = sheet.createRow(rowCounter++);
@@ -1348,13 +1352,13 @@ public class AMISSupplyDemandExcel {
         int m = 2;
         //LOGGER.info("buildUnbalancedRow: year ... "+year);
 
-
         for (String dateCode : datesMap.keySet()) {
             //String date = datesMap.get(dateCode);
             String date = dateCode;
             cell = unbalancedRow.createCell((short) m);
-            HSSFCellStyle elementValueCellStyle = utils.getRightAlignmentWithBordersStyle();
-            cell.setCellStyle(utils.getBigBoldTextCellStyle(workbook, elementValueCellStyle));
+            HSSFCellStyle elementValueCellStyle = utils.getBasicWithRightAlWithBorders();
+
+            cell.setCellStyle(elementValueCellStyle);
 
             // Total Utilization (35) - Supply (19)
             if (year.get(date) != null) {
@@ -1367,29 +1371,38 @@ public class AMISSupplyDemandExcel {
                     //LOGGER.info("buildUnbalancedRow: START ... 5iii total_util = "+total_util + " | supply = "+supply);
 
                     cell.setCellValue(Math.round(total_util - supply));
+                    cell.setCellStyle(utils.getBigBoldCellStyle());
+
                 } else {
                     cell.setCellValue("");
+                    cell.setCellStyle(utils.getBigBoldCellStyle());
+
                 }
             } else {
                 //LOGGER.info("buildUnbalancedRow: START ... year.get("+date+") is NULL");
 
                 cell.setCellValue("");
+                cell.setCellStyle(utils.getBigBoldCellStyle());
+
             }
+            cell.getCellStyle().setDataFormat(dataFormat.getFormat("0"));
             m++;
         }
 
         //Explanation
         Row unbalancedExplanationRow = sheet.createRow(rowCounter++);
-        HSSFCellStyle newCellStyle = utils.getBasicWithRightAlWithBorders();
-        cell.setCellStyle(newCellStyle);
+      //  HSSFCellStyle newCellStyle1 = utils.getLeftAlignmentStyle();
+
 
        // cell.setCellStyle(elementValueCellStyle);
         cell = unbalancedExplanationRow.createCell((short) 0);
+        //cell.setCellStyle(newCellStyle1);
         //cell.setCellStyle(utils.getSmallTextCellStyle(null, true));
         cell.setCellStyle(utils.getBoldSmallTextCellStyle());
 
         cell.setCellValue(" UNBALANCED = (" + (totalUtilName.trim()).toUpperCase() + ") - (" + (supplyName.trim()).toUpperCase() + ")");
 
+        cell.getCellStyle().setBorderBottom((short)0);
         LOGGER.info("createUnbalancedRow: END .....");
 
         return rowCounter;
@@ -1432,12 +1445,11 @@ public class AMISSupplyDemandExcel {
                 countryLabel = label;
             }
 
-          /*  if( qvo.getCountriesNationalMarketingYear().get(datasource)!=null && qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode)!=null  &&!qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode).isEmpty())   {
+            if( qvo.getCountriesNationalMarketingYear().get(datasource)!=null && qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode)!=null  &&!qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode).isEmpty())   {
                 if(qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode).get(countryLabel)!=null)
                     value = qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode).get(countryLabel).get(0);
 
             }
-*/
 
             cell.setCellValue(value);
         } else {
@@ -1466,6 +1478,43 @@ public class AMISSupplyDemandExcel {
 
         return rowCounter;
     }
+
+    public int createInformationRow(int rowCounter, Sheet sheet,  HSSFWorkbook workbook, String header, String headerValue, Boolean isBold, int cellIndex){
+        Row row = sheet.createRow(rowCounter++);
+
+        if(header != null && headerValue==null){
+            Cell cell = row.createCell((short) cellIndex);
+            cell.setCellStyle(utils.getSmallTextCellStyle(null,isBold));
+            cell.setCellValue(header);
+
+            row.createCell((short) 1).setCellValue("");
+        }
+        else {
+            Cell cell = row.createCell((short) cellIndex);
+            cell.setCellStyle(utils.getSmallTextCellStyle(null, isBold));
+            cell.setCellValue(header);
+
+            cell = row.createCell((short) (cellIndex+1));
+            cell.setCellStyle(utils.getSmallTextCellStyle( null, isBold));
+            cell.setCellValue(headerValue);
+        }
+
+
+        return rowCounter;
+    }
+
+    public int createMarketingTradeNoteRow(int rowCounter, Sheet sheet, HSSFWorkbook workbook, String note){
+        Row row = sheet.createRow(rowCounter++);
+        Cell cell = row.createCell((short) 0);
+        HSSFCellStyle cellStyle = utils.getLeftAlignmentStyle();
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue(note);
+
+        return rowCounter;
+    }
+
+
+
 
 
 }
