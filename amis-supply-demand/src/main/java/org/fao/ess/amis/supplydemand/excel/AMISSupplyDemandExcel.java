@@ -86,19 +86,6 @@ public class AMISSupplyDemandExcel {
         utils = new AmisSupplyDemandExcelUtilsNew();
         utils.initStyles(workbook);
 
-      /*  AMISSupplyDemandExcelUtils.setCustomizedPalette(workbook);
-        AMISSupplyDemandExcelUtils.initializeFontStyles(workbook);
-*/
-/*
-        ///// OLD excel utils //////////////////
-
-        AMISSupplyDemandExcelUtils.setCustomizedPalette(workbook);
-                AMISSupplyDemandExcelUtils.initializeFontStyles(workbook);
-
-
-*/
-
-
         //Initialize font
 
         // create Country or Product Workbook
@@ -322,7 +309,7 @@ public class AMISSupplyDemandExcel {
 
             //Footnotes
             //IGC & PSD Soybeans Footnote
-            boolean footnoteAdded = AMISSupplyDemandNotes.createSoybeansFootNotes(rowCounter, workbook, sheet, qvo, country);
+            boolean footnoteAdded = AMISSupplyDemandNotes.createSoybeansFootNotes(rowCounter, workbook, sheet, qvo, country, utils);
 
 
             //Footnotes
@@ -337,12 +324,11 @@ public class AMISSupplyDemandExcel {
                 countryLabel = label;
             }
 
-         /*TODO:false
-         if( qvo.getElementFootNotesByCountry().get(datasource)!=null && qvo.getElementFootNotesByCountry().get(datasource).get(productCode)!=null  && !qvo.getElementFootNotesByCountry().get(datasource).get(productCode).isEmpty())   {
-                if(qvo.getElementFootNotesByCountry().get(datasource).get(productCode).get(countryLabel)!=null)
-                    AMISSupplyDemandNotes.createFootnotes(rowCounter, sheet, workbook, qvo.getElementFootNotesByCountry().get(datasource).get(productCode).get(countryLabel), footnoteAdded);
 
-            }*/
+            if( qvo.getElementFootNotesByCountry()!=null && qvo.getElementFootNotesByCountry().get(datasource)!=null && qvo.getElementFootNotesByCountry().get(datasource).get(productCode)!=null  && !qvo.getElementFootNotesByCountry().get(datasource).get(productCode).isEmpty())   {
+                if(qvo.getElementFootNotesByCountry().get(datasource).get(productCode).get(countryLabel)!=null)
+                    AMISSupplyDemandNotes.createFootnotes(rowCounter, sheet, workbook, qvo.getElementFootNotesByCountry().get(datasource).get(productCode).get(countryLabel), footnoteAdded, utils);
+            }
 
 
             //Fix the width of the first two columns
@@ -577,7 +563,7 @@ public class AMISSupplyDemandExcel {
             LOGGER.info("... OTHER TABLE DONE   " + datasource);
 
             //Footnotes
-            boolean footnoteAdded = AMISSupplyDemandNotes.createSoybeansFootNotes(rowCounter, workbook, sheet, qvo, datasource);
+            boolean footnoteAdded = AMISSupplyDemandNotes.createSoybeansFootNotes(rowCounter, workbook, sheet, qvo, datasource, utils);
 
             //Footnotes
             String productCode = AMISSupplyDemandUtils.getProductCode(qvo, "");
@@ -585,7 +571,7 @@ public class AMISSupplyDemandExcel {
 
             if (qvo.getElementFootNotesByCountry().get(datasource) != null && qvo.getElementFootNotesByCountry().get(datasource).get(productCode) != null && !qvo.getElementFootNotesByCountry().get(datasource).get(productCode).isEmpty()) {
                 if (qvo.getElementFootNotesByCountry().get(datasource).get(productCode).get(countryLabel) != null)
-                    AMISSupplyDemandNotes.createFootnotes(rowCounter, sheet, workbook, qvo.getElementFootNotesByCountry().get(datasource).get(productCode).get(countryLabel), footnoteAdded);
+                    AMISSupplyDemandNotes.createFootnotes(rowCounter, sheet, workbook, qvo.getElementFootNotesByCountry().get(datasource).get(productCode).get(countryLabel), footnoteAdded, utils);
 
             }
 
@@ -942,13 +928,8 @@ public class AMISSupplyDemandExcel {
 
             rowCounter = createYearRow(qvo, rowCounter, sheet, workbook, country, label, datesMap, title, datasource);
         } else {
-        /*  sheet.addMergedRegion(new CellRangeAddress(rowCounter, (short) 0, rowCounter+1, (short) 0));
-          sheet.addMergedRegion(new CellRangeAddress(rowCounter, (short) 1, rowCounter+1, (short) 1));*/
-
             sheet.addMergedRegion(new CellRangeAddress(rowCounter, rowCounter + 1, (short) 0, (short) 0));
             sheet.addMergedRegion(new CellRangeAddress(rowCounter, rowCounter + 1, (short) 1, (short) 1));
-
-
             rowCounter = createITYRow(qvo, rowCounter, sheet, workbook, country, label, datasource);
             rowCounter = utils.createEmptyRow(rowCounter, sheet, workbook);
         }
@@ -1032,32 +1013,6 @@ public class AMISSupplyDemandExcel {
                             HSSFCellStyle elementValueCellStyle = utils.getBasicWithRightAlWithBorders();
 
                             cell.setCellStyle(elementValueCellStyle);
-
-                          /*  // Total Utilization (35) - Supply (19)
-                            if (elementCode.equals("35") || elementCode.equals("19")) {
-                                cell.setCellStyle(utils.getBigBoldTextCellStyle(workbook, elementValueCellStyle));
-                            } else {
-*//*
-                                cell.setCellStyle(elementValueCellStyle);
-*//*
-
-                                if (FOOD_BALANCE_ELEMENTS_INDENTED.contains(elementCode)) {
-                                    cell.getCellStyle().setFont(utils.getItalicFont());
-                                }
-
-                                //if other uses elements is present then level one elements in italics
-                                // and level two elements in italics and small text
-                                if (otherUsesPresent) {
-                                    if (FOOD_BALANCE_ELEMENTS_MORE_INDENTED.contains(elementCode)) {
-                                        cell.getCellStyle().setFont(utils.getItalicisedSmallFont());
-                                    }
-                                } else {
-                                    if (FOOD_BALANCE_ELEMENTS_MORE_INDENTED.contains(elementCode)) {
-                                        cell.getCellStyle().setFont(utils.getItalicFont());
-                                    }
-                                }
-                            }*/
-
 
                             // Total Utilization (35) - Supply (19)
                             if (elementCode.equals("35") || elementCode.equals("19")) {
@@ -1149,13 +1104,6 @@ public class AMISSupplyDemandExcel {
             t = createUnbalancedRow(t, sheet, workbook, datesMap, year, elementsMap);
 
             //Unit merge
-           /* sheet.addMergedRegion(new CellRangeAddress(
-                    9, //rowFrom(0-based)
-                    (short)1, //colFrom  (0-based)
-                    (t-2), //rowTo (0-based)
-                    (short) 1 //colTo  (0-based)
-            ));*/
-
             sheet.addMergedRegion(new CellRangeAddress(
                     9, //rowFrom(0-based)
                     (t - 2), //rowTo (0-based)
@@ -1164,13 +1112,6 @@ public class AMISSupplyDemandExcel {
             ));
 
             //Marketing Year Note
-          /*  sheet.addMergedRegion(new CellRangeAddress(
-                    t, //rowFrom(0-based)
-                    (short)0, //colFrom  (0-based)
-                    t, //rowTo (0-based)
-                    (short) 14 //colTo  (0-based)
-            ));*/
-
             sheet.addMergedRegion(new CellRangeAddress(
                     t, //rowFrom(0-based)
                     t, //rowTo (0-based)
@@ -1221,14 +1162,8 @@ public class AMISSupplyDemandExcel {
 
         if (title != null && title.equals(ITY_TABLE_TITLE)) {
             System.out.println(" ITY_TABLE_TITLE ROW INDEX: " + t);
-            //Unit merge
-          /*   sheet.addMergedRegion(new CellRangeAddress(
-                   t-2, //rowFrom(0-based)
-                     (short)1, //colFrom  (0-based)
-                     (t-1), //rowTo (0-based)
-                     (short) 1 //colTo  (0-based)
-             ));*/
 
+            //Unit merge
             sheet.addMergedRegion(new CellRangeAddress(
                     t - 2, //rowFrom(0-based)
                     (t - 1), //rowTo (0-based)
@@ -1236,15 +1171,7 @@ public class AMISSupplyDemandExcel {
                     (short) 1 //colTo  (0-based)
             ));
 
-
             //International Trade Year Note
-          /*  sheet.addMergedRegion(new CellRangeAddress(
-                    t, //rowFrom(0-based)
-                    (short)0, //colFrom  (0-based)
-                    t, //rowTo (0-based)
-                    (short) 14 //colTo  (0-based)
-            ));*/
-
             sheet.addMergedRegion(new CellRangeAddress(
                     t, //rowFrom(0-based)
                     t, //rowTo (0-based)
@@ -1391,17 +1318,9 @@ public class AMISSupplyDemandExcel {
 
         //Explanation
         Row unbalancedExplanationRow = sheet.createRow(rowCounter++);
-      //  HSSFCellStyle newCellStyle1 = utils.getLeftAlignmentStyle();
-
-
-       // cell.setCellStyle(elementValueCellStyle);
         cell = unbalancedExplanationRow.createCell((short) 0);
-        //cell.setCellStyle(newCellStyle1);
-        //cell.setCellStyle(utils.getSmallTextCellStyle(null, true));
         cell.setCellStyle(utils.getBoldSmallTextCellStyle());
-
         cell.setCellValue(" UNBALANCED = (" + (totalUtilName.trim()).toUpperCase() + ") - (" + (supplyName.trim()).toUpperCase() + ")");
-
         cell.getCellStyle().setBorderBottom((short)0);
         LOGGER.info("createUnbalancedRow: END .....");
 
