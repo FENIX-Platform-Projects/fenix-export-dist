@@ -1185,9 +1185,9 @@ public class AMISSupplyDemandExcel {
                 countryLabel = label;
             }
 
-            if( qvo.getCountriesNationalMarketingYear().get(datasource)!=null && qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode)!=null  &&!qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode).isEmpty())   {
+           if( qvo.getCountriesNationalMarketingYear().get(datasource)!=null && qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode)!=null  &&!qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode).isEmpty())   {
                 if(qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode).get(countryLabel)!=null)
-                    t = AMISSupplyDemandNotes.createMarketingTradeNoteRow(t, sheet, workbook, AMISSupplyDemandNotes.buildNote(qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode).get(countryLabel).get(0), qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode).get(countryLabel).get(1), qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode).get(countryLabel).get(2), qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode).get(countryLabel).get(3), "NMY"));
+                 t = AMISSupplyDemandNotes.createMarketingTradeNoteRow(t, sheet, workbook, AMISSupplyDemandNotes.buildNote(qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode).get(countryLabel).get(0), qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode).get(countryLabel).get(1), qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode).get(countryLabel).get(2), qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode).get(countryLabel).get(3), "NMY"));
 
             }
             //FAO-CBS Rice Note
@@ -1380,8 +1380,14 @@ public class AMISSupplyDemandExcel {
 
         //Explanation
         Row unbalancedExplanationRow = sheet.createRow(rowCounter++);
+        HSSFCellStyle newCellStyle = utils.getBasicWithRightAlWithBorders();
+        cell.setCellStyle(newCellStyle);
+
+       // cell.setCellStyle(elementValueCellStyle);
         cell = unbalancedExplanationRow.createCell((short) 0);
-        cell.setCellStyle(utils.getSmallTextCellStyle(null, true));
+        //cell.setCellStyle(utils.getSmallTextCellStyle(null, true));
+        cell.setCellStyle(utils.getBoldSmallTextCellStyle());
+
         cell.setCellValue(" UNBALANCED = (" + (totalUtilName.trim()).toUpperCase() + ") - (" + (supplyName.trim()).toUpperCase() + ")");
 
         LOGGER.info("createUnbalancedRow: END .....");

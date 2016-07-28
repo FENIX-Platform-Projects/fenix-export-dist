@@ -54,6 +54,7 @@ public class AmisSupplyDemandExcelUtilsNew {
         styles.put("bigBold", createBigBold(workbook));
         styles.put("italic", createItalic(workbook));
         styles.put("smallItalic", createSmallItalic(workbook));
+        styles.put("boldSmall", createBoldSmall(workbook));
 
         styles.put("simpleFont", createNormalWithBold(workbook));
         styles.put("normalWithSmallBold", createNormalWithSmallBold(workbook));
@@ -182,6 +183,13 @@ public class AmisSupplyDemandExcelUtilsNew {
         HSSFCellStyle cellStyle = workbook.createCellStyle();
         getBordersStyle(workbook, cellStyle);
         cellStyle.setFont(italicisedSmallFont);
+        return cellStyle;
+    }
+
+    private static HSSFCellStyle  createBoldSmall (HSSFWorkbook workbook) {
+        HSSFCellStyle cellStyle = workbook.createCellStyle();
+        getBordersStyle(workbook, cellStyle);
+        cellStyle.setFont(boldSmallFont);
         return cellStyle;
     }
 
@@ -390,6 +398,10 @@ public class AmisSupplyDemandExcelUtilsNew {
 
     public static  HSSFCellStyle getItalicCellStyle () {
         return styles.get("italic");
+    }
+
+    public static  HSSFCellStyle getBoldSmallTextCellStyle () {
+        return styles.get("boldSmall");
     }
 
     public static  HSSFCellStyle getSmallItalicCellStyle () {
