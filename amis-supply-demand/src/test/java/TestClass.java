@@ -51,14 +51,17 @@ public class TestClass {
         qvo.setOtherFoodBalanceElements(createQVOList(2));
         LinkedHashMap<String, String> itys = new LinkedHashMap<>();
 
-        itys.put("13","Feed Use - Million tonnes");
-        itys.put("15","Other Uses - Million tonnes");
-        itys.put("10","Exports (NMY) - Million tonnes");
+        itys.put("8","Import (ITY) - Million tonnes");
+        itys.put("12","Exports (ITY) - Million tonnes");
+
         qvo.setItyElements(itys);
         // set setCountryDates
         qvo.setCountryDates(setCountryDates());
         // set getCountriesInternationalTradeYear
         qvo.setCountriesInternationalTradeYear(getCountriesInternationalTradeYear());
+
+        // set getCountriesMarketingTradeYear
+         qvo.setCountriesNationalMarketingYear(getCountriesMarketingTradeYear());
         // xLabel
         qvo.setxLabel("COUNTRY");
         Map<String,String> databases = new HashMap<String, String>();
@@ -173,6 +176,9 @@ public class TestClass {
                 third.put("14","Food Use - Million tonnes");
                 third.put("13","Feed Use - Million tonnes");
                 third.put("15","Other Uses - Million tonnes");
+                //third.put("21","Seeds");
+                //third.put("34","Post Harvest Losses");
+               // third.put("28","Industrial Use");
                 third.put("10","Exports (NMY) - Million tonnes");
                 third.put("16","Closing Stocks - Million tonnes");
                 second.put("5",third);
@@ -220,6 +226,20 @@ public class TestClass {
         LinkedHashMap<String,  LinkedList<String>> third = new LinkedHashMap<>();
         String[] list = {"July/June", "2015/16", "July 2015 to June 2016"};
         LinkedList<String> last = new LinkedList<>(Arrays.asList(list));
+        third.put("Argentina",last);
+        third.put("Brazil",last);
+        second.put("5",third);
+        result.put("CBS",second);
+        return result;
+
+    }
+
+    private static LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String,  LinkedList<String>>>> getCountriesMarketingTradeYear() {
+        LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String,  LinkedList<String>>>> result = new LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String,  LinkedList<String>>>>();
+        LinkedHashMap<String, LinkedHashMap<String,  LinkedList<String>>> second = new LinkedHashMap<String, LinkedHashMap<String,  LinkedList<String>>>();
+        LinkedHashMap<String,  LinkedList<String>> third = new LinkedHashMap<String,  LinkedList<String>>();
+        String[] list = {"July/June", "2015/16", "July 2015 to June 2016"};
+        LinkedList<String> last = new LinkedList<String>(Arrays.asList(list));
         third.put("Argentina",last);
         third.put("Brazil",last);
         second.put("5",third);
