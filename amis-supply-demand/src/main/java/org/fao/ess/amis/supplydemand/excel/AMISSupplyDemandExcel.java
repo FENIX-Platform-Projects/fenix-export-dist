@@ -1186,11 +1186,11 @@ public class AMISSupplyDemandExcel {
                 countryLabel = label;
             }
 
-           /* if( qvo.getCountriesNationalMarketingYear().get(datasource)!=null && qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode)!=null  &&!qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode).isEmpty())   {
+            if( qvo.getCountriesNationalMarketingYear().get(datasource)!=null && qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode)!=null  &&!qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode).isEmpty())   {
                 if(qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode).get(countryLabel)!=null)
                     t = AMISSupplyDemandNotes.createMarketingTradeNoteRow(t, sheet, workbook, AMISSupplyDemandNotes.buildNote(qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode).get(countryLabel).get(0), qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode).get(countryLabel).get(1), qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode).get(countryLabel).get(2), qvo.getCountriesNationalMarketingYear().get(datasource).get(productCode).get(countryLabel).get(3), "NMY"));
 
-            }*/
+            }
             //FAO-CBS Rice Note
             if (qvo.getxLabel().equals("DATASOURCE")) {
                 if (AMISSupplyDemandUtils.itemsContainRice(qvo) && datasource.equals(AMISConstants.CBS.name())) {
