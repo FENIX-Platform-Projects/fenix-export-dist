@@ -986,15 +986,17 @@ public class AMISSupplyDemandExcel {
                 elementCellStyle.cloneStyleFrom(utils.getBoldTextCellStyle(workbook, elementCellStyle));
             }
             //Apply first indentation
-            if (FOOD_BALANCE_ELEMENTS_INDENTED.contains(elementCode)) {
+            else if (FOOD_BALANCE_ELEMENTS_INDENTED.contains(elementCode)) {
                 elementCellStyle = utils.getGreyItalicCellStyle();
                 elementName = "     " + elementName;
             }
-
             //Append a second indentation
-            if (FOOD_BALANCE_ELEMENTS_MORE_INDENTED.contains(elementCode) && otherUsesPresent) {
+            else if (FOOD_BALANCE_ELEMENTS_MORE_INDENTED.contains(elementCode) && otherUsesPresent) {
                 elementCellStyle.setFont(utils.getItalicisedSmallFont());
                 elementName = "          " + elementName;
+            }
+            else {
+                elementCellStyle = utils.getGreyNormalCellStyle();
             }
 
 
@@ -1009,8 +1011,8 @@ public class AMISSupplyDemandExcel {
             cell = row.createCell((short) 1);
 
             cell.setCellStyle(utils.getBordersStyle(workbook, null));
-            /*cell.getCellStyle().setVerticalAlignment(CellStyle.VERTICAL_CENTER);
-            cell.getCellStyle().setAlignment(CellStyle.ALIGN_CENTER);*/
+            cell.getCellStyle().setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+            cell.getCellStyle().setAlignment(CellStyle.ALIGN_CENTER);
             cell.setCellValue(elementUnit);
             int j = 2;
             for (String dateCode : datesMap.keySet()) {
@@ -1027,13 +1029,13 @@ public class AMISSupplyDemandExcel {
 
                             cell.setCellStyle(elementValueCellStyle);
 
-                            // Total Utilization (35) - Supply (19)
+                          /*  // Total Utilization (35) - Supply (19)
                             if (elementCode.equals("35") || elementCode.equals("19")) {
                                 cell.setCellStyle(utils.getBigBoldTextCellStyle(workbook, elementValueCellStyle));
                             } else {
-/*
+*//*
                                 cell.setCellStyle(elementValueCellStyle);
-*/
+*//*
 
                                 if (FOOD_BALANCE_ELEMENTS_INDENTED.contains(elementCode)) {
                                     cell.getCellStyle().setFont(utils.getItalicFont());
@@ -1050,6 +1052,30 @@ public class AMISSupplyDemandExcel {
                                         cell.getCellStyle().setFont(utils.getItalicFont());
                                     }
                                 }
+                            }*/
+
+
+                            // Total Utilization (35) - Supply (19)
+                            if (elementCode.equals("35") || elementCode.equals("19")) {
+                                cell.setCellStyle(utils.getBigBoldCellStyle());
+                            } else {
+
+                                if (FOOD_BALANCE_ELEMENTS_INDENTED.contains(elementCode)) {
+                                    cell.setCellStyle(utils.getItalicCellStyle());
+                                }
+                                else if (FOOD_BALANCE_ELEMENTS_MORE_INDENTED.contains(elementCode)) {
+                                    //if other uses elements is present then level one elements in italics
+                                    // and level two elements in italics and small text
+                                    if (otherUsesPresent) {
+                                        cell.setCellStyle(utils.getSmallItalicCellStyle());
+                                        cell.getCellStyle().setFont(utils.getItalicisedSmallFont());
+                                    } else {
+                                        cell.setCellStyle(utils.getItalicCellStyle());
+                                    }
+                                } else {
+                                    cell.setCellStyle(utils.getNormalCellStyle());
+                                }
+
                             }
 
 

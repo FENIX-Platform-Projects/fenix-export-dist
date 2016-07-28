@@ -17,7 +17,9 @@ public class AmisSupplyDemandExcelUtilsNew {
     public static HSSFFont bigBoldFont;
     public static HSSFFont smallFont;
     public static HSSFFont boldSmallFont;
+    public static HSSFFont normalFont;
     public static HSSFFont basicFont;
+
     private static HSSFPalette palette;
     private static HSSFWorkbook workbookInstance;
 
@@ -43,10 +45,20 @@ public class AmisSupplyDemandExcelUtilsNew {
         styles.put("centerAlignment", createCenterAlignmentStyle(workbook));
         styles.put("greyBold", createGreyWithBold(workbook));
         styles.put("greyItalic", createGreyWithItalic(workbook));
+        styles.put("greyNormal", createGreyWithNormal(workbook));
+        styles.put("normal", createNormal(workbook));
         styles.put("greyBoldSmall", createGreyWithSmallBold(workbook));
         styles.put("normalWithBold", createNormalWithBold(workbook));
         styles.put("normalWithSmallBold", createNormalWithSmallBold(workbook));
         styles.put("normalWithItalic", createNormalWithItalic(workbook));
+        styles.put("bigBold", createBigBold(workbook));
+        styles.put("italic", createItalic(workbook));
+        styles.put("smallItalic", createSmallItalic(workbook));
+
+        styles.put("simpleFont", createNormalWithBold(workbook));
+        styles.put("normalWithSmallBold", createNormalWithSmallBold(workbook));
+        styles.put("normalWithItalic", createNormalWithItalic(workbook));
+
 
         styles.put("flagWithBold", createFlagWithBold(workbook));
         styles.put("flagWithSmallBold", createFlagWithSmallBold(workbook));
@@ -133,6 +145,43 @@ public class AmisSupplyDemandExcelUtilsNew {
         cellStyle.setFillForegroundColor(HSSFColor.GREY_50_PERCENT.index);
         getBordersStyle(workbook, cellStyle);
         cellStyle.setFont(italicFont);
+        return cellStyle;
+    }
+
+    private static HSSFCellStyle  createGreyWithNormal (HSSFWorkbook workbook) {
+        HSSFCellStyle cellStyle = workbook.createCellStyle();
+        cellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        cellStyle.setFillForegroundColor(HSSFColor.GREY_50_PERCENT.index);
+        getBordersStyle(workbook, cellStyle);
+        cellStyle.setFont(normalFont);
+        return cellStyle;
+    }
+
+    private static HSSFCellStyle  createNormal (HSSFWorkbook workbook) {
+        HSSFCellStyle cellStyle = workbook.createCellStyle();
+        getBordersStyle(workbook, cellStyle);
+        cellStyle.setFont(normalFont);
+        return cellStyle;
+    }
+
+    private static HSSFCellStyle  createBigBold (HSSFWorkbook workbook) {
+        HSSFCellStyle cellStyle = workbook.createCellStyle();
+        getBordersStyle(workbook, cellStyle);
+        cellStyle.setFont(bigBoldFont);
+        return cellStyle;
+    }
+
+    private static HSSFCellStyle  createItalic (HSSFWorkbook workbook) {
+        HSSFCellStyle cellStyle = workbook.createCellStyle();
+        getBordersStyle(workbook, cellStyle);
+        cellStyle.setFont(italicFont);
+        return cellStyle;
+    }
+
+    private static HSSFCellStyle  createSmallItalic (HSSFWorkbook workbook) {
+        HSSFCellStyle cellStyle = workbook.createCellStyle();
+        getBordersStyle(workbook, cellStyle);
+        cellStyle.setFont(italicisedSmallFont);
         return cellStyle;
     }
 
@@ -327,6 +376,26 @@ public class AmisSupplyDemandExcelUtilsNew {
         return styles.get("greyItalic");
     }
 
+    public static  HSSFCellStyle getGreyNormalCellStyle () {
+        return styles.get("greyNormal");
+    }
+
+    public static  HSSFCellStyle getNormalCellStyle () {
+        return styles.get("normal");
+    }
+
+    public static  HSSFCellStyle getBigBoldCellStyle () {
+        return styles.get("bigBold");
+    }
+
+    public static  HSSFCellStyle getItalicCellStyle () {
+        return styles.get("italic");
+    }
+
+    public static  HSSFCellStyle getSmallItalicCellStyle () {
+        return styles.get("smallItalic");
+    }
+
     public static  HSSFCellStyle getNormalWithBold () {
         return styles.get("normalWithBold");
     }
@@ -463,7 +532,7 @@ public class AmisSupplyDemandExcelUtilsNew {
 
         bigBoldFont = workbook.createFont();
         bigBoldFont.setBoldweight(Font.BOLDWEIGHT_BOLD);
-        bigBoldFont.setFontHeightInPoints((short) 10);
+        bigBoldFont.setFontHeightInPoints((short) 11);
 
         whiteFont = workbook.createFont();
         whiteFont.setColor(HSSFColor.WHITE.index);
@@ -481,6 +550,10 @@ public class AmisSupplyDemandExcelUtilsNew {
         boldSmallFont = workbook.createFont();
         boldSmallFont.setFontHeightInPoints((short) 8);
         boldSmallFont.setBoldweight(Font.BOLDWEIGHT_BOLD);
+
+        normalFont = workbook.createFont();
+        normalFont.setBoldweight(Font.BOLDWEIGHT_NORMAL);
+        normalFont.setFontHeightInPoints((short) 10);
 
         basicFont = workbook.createFont();
 
@@ -578,6 +651,7 @@ public class AmisSupplyDemandExcelUtilsNew {
         return italicisedSmallFont;
     }
 
+
     public static HSSFFont getItalicFont () {
         return italicFont;
     }
@@ -592,6 +666,10 @@ public class AmisSupplyDemandExcelUtilsNew {
 
     public static HSSFFont getBasicFont () {
         return basicFont;
+    }
+
+    public static HSSFFont getNormalFont () {
+        return normalFont;
     }
 
     public static void setLandscapeAndFitOnePg (Sheet sheet) {
