@@ -120,6 +120,9 @@ public class TestClass {
                 values.put("19",(Double)41.9);
                 values.put("19",(Double)41.9);
                 values.put("35",(Double)41.9);
+                values.put("21",(Double)41.9);
+                values.put("34",(Double)41.9);
+                values.put("28",(Double)41.9);
 
                 secondValues.put("2016/17",values);
                 third.put("Argentina", secondValues);
@@ -176,9 +179,9 @@ public class TestClass {
                 third.put("14","Food Use - Million tonnes");
                 third.put("13","Feed Use - Million tonnes");
                 third.put("15","Other Uses - Million tonnes");
-                //third.put("21","Seeds");
-                //third.put("34","Post Harvest Losses");
-               // third.put("28","Industrial Use");
+                third.put("21","Seeds - Million tonnes");
+                third.put("34","Post Harvest Losses - Million tonnes");
+                third.put("28","Industrial Use - Million tonnes");
                 third.put("10","Exports (NMY) - Million tonnes");
                 third.put("16","Closing Stocks - Million tonnes");
                 second.put("5",third);
