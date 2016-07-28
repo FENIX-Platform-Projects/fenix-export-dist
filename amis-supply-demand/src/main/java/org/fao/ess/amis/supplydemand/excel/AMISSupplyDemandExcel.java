@@ -1068,7 +1068,6 @@ public class AMISSupplyDemandExcel {
                                     // and level two elements in italics and small text
                                     if (otherUsesPresent) {
                                         cell.setCellStyle(utils.getSmallItalicCellStyle());
-                                        cell.getCellStyle().setFont(utils.getItalicisedSmallFont());
                                     } else {
                                         cell.setCellStyle(utils.getItalicCellStyle());
                                     }
