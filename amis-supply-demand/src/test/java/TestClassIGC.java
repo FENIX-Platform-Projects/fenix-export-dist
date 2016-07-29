@@ -1,10 +1,9 @@
 import org.fao.ess.amis.supplydemand.dao.AMISQueryVO;
 import org.fao.ess.amis.supplydemand.excel.AMISSupplyDemandExcel;
-import org.fao.ess.amis.supplydemand.utils.parsing.JSONUtils;
 
 import java.util.*;
 
-public class TestClass {
+public class TestClassIGC {
 
 
     public static void main(String[] args) {
@@ -34,23 +33,13 @@ public class TestClass {
 
         // set Items
         Map<String, String> items = new HashMap<>();
-        items.put("4","Rice");
+        items.put("6","Soybeans");
         qvo.setItems(items);
 
         //areas
         Map<String, String> areas = new HashMap<>();
         areas.put("12","Argentina");
-        areas.put("1","Brazil1");
-        areas.put("2","Brazil2");
-        areas.put("3","Brazil3");
-        areas.put("4","Brazil4");
-        areas.put("5","Brazil5");
-        areas.put("6","Brazil1");
-        areas.put("7","Brazil2");
-        areas.put("8","Brazil3");
-        areas.put("9","Brazil4");
-        areas.put("10","Brazil5");
-
+        areas.put("37","Brazil");
         qvo.setAreas(areas);
 
         // set OrderBy
@@ -75,7 +64,7 @@ public class TestClass {
         // xLabel
         qvo.setxLabel("COUNTRY");
         Map<String,String> databases = new HashMap<String, String>();
-        databases.put("CBS","FAO-AMIS");
+        databases.put("IGC","FAO-AMIS");
         qvo.setDatabases(databases);
 
 
@@ -112,6 +101,8 @@ public class TestClass {
 
         LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, Map<String, Double>>>> result= new LinkedHashMap<>();
         Map<String, Double> values = new HashMap<>();
+        Map<String, Double> valuesSecondColumn = new HashMap<>();
+
         LinkedHashMap<String, Map<String, Double>> secondValues = new LinkedHashMap<>();
         LinkedHashMap<String, LinkedHashMap<String, Map<String, Double>>> third = new LinkedHashMap<>();
 
@@ -134,19 +125,28 @@ public class TestClass {
                 values.put("34",(Double)41.9);
                 values.put("28",(Double)41.9);
 
-                secondValues.put("2016/17",values);
+                valuesSecondColumn.put("16",(Double)4.0);
+                valuesSecondColumn.put("20",(Double)16.4);
+                valuesSecondColumn.put( "10",(Double)21.5);
+                valuesSecondColumn.put("13",(Double)12.6);
+                valuesSecondColumn.put("14",(Double)0.3);
+                valuesSecondColumn.put("7",(Double)0.0);
+                valuesSecondColumn.put("18",(Double)4.0);
+                valuesSecondColumn.put("15",(Double)3.5);
+                valuesSecondColumn.put("5",(Double)37.9);
+                valuesSecondColumn.put("19",(Double)41.9);
+                valuesSecondColumn.put("19",(Double)41.9);
+                valuesSecondColumn.put("35",(Double)41.9);
+                valuesSecondColumn.put("21",(Double)41.9);
+                valuesSecondColumn.put("34",(Double)41.9);
+                valuesSecondColumn.put("28",(Double)41.9);
+
+                secondValues.put("2015/16",values);
+                secondValues.put("2016/17",valuesSecondColumn);
+
                 third.put("Argentina", secondValues);
-                third.put("Brazil1", secondValues);
-                third.put("Brazil2", secondValues);
-                third.put("Brazil3", secondValues);
-                third.put("Brazil4", secondValues);
-                third.put("Brazil5", secondValues);
-                third.put("Brazil6", secondValues);
-                third.put("Brazil7", secondValues);
-                third.put("Brazil8", secondValues);
-                third.put("Brazil9", secondValues);
-                third.put("Brazil10", secondValues);
-                result.put("CBS", third);
+                third.put("Brazil", secondValues);
+                result.put("IGC", third);
                 break;
 
             // other
@@ -155,38 +155,37 @@ public class TestClass {
                 values.put("2",(Double)5.99);
                 values.put("25",(Double)16.4);
                 values.put( "4",(Double)21.5);
-                secondValues.put("2016/17",values);
+
+                valuesSecondColumn.put("2",(Double)5.99);
+                valuesSecondColumn.put("25",(Double)16.4);
+                valuesSecondColumn.put( "4",(Double)21.5);
+
+
+                secondValues.put("2015/16",values);
+                secondValues.put("2016/17",valuesSecondColumn);
+
+
                 third.put("Argentina", secondValues);
-                third.put("Brazil1", secondValues);
-                third.put("Brazil2", secondValues);
-                third.put("Brazil3", secondValues);
-                third.put("Brazil4", secondValues);
-                third.put("Brazil5", secondValues);
-                third.put("Brazil6", secondValues);
-                third.put("Brazil7", secondValues);
-                third.put("Brazil8", secondValues);
-                third.put("Brazil9", secondValues);
-                third.put("Brazil10", secondValues);
-                result.put("CBS", third);
+                third.put("Brazil", secondValues);
+                result.put("IGC", third);
 
                 break;
 
             case 3:
                 values.put("12",(Double)4.0);
                 values.put("8",(Double)16.4);
-                secondValues.put("2016/17",values);
+
+                valuesSecondColumn.put("12",(Double)4.0);
+                valuesSecondColumn.put("8",(Double)16.4);
+
+
+                secondValues.put("2015/16",values);
+                secondValues.put("2016/17",valuesSecondColumn);
+
+
                 third.put("Argentina", secondValues);
-                third.put("Brazil1", secondValues);
-                third.put("Brazil2", secondValues);
-                third.put("Brazil3", secondValues);
-                third.put("Brazil4", secondValues);
-                third.put("Brazil5", secondValues);
-                third.put("Brazil6", secondValues);
-                third.put("Brazil7", secondValues);
-                third.put("Brazil8", secondValues);
-                third.put("Brazil9", secondValues);
-                third.put("Brazil10", secondValues);
-                result.put("CBS", third);
+                third.put("Brazil", secondValues);
+                result.put("IGC", third);
                 break;
         }
 
@@ -197,7 +196,7 @@ public class TestClass {
 
     private static LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, String>>> createQVOList(int number) {
 
-        //{CBS={5={1=Population - 1000s, 25=Per Capita Food Use - Kg/Yr, 37=Area Planted - Million Ha, 2=Area Harvested - Million Ha, 4=Yield - Tonnes/Ha}}}
+        //{IGC={5={1=Population - 1000s, 25=Per Capita Food Use - Kg/Yr, 37=Area Planted - Million Ha, 2=Area Harvested - Million Ha, 4=Yield - Tonnes/Ha}}}
 
         LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, String>>> result = new LinkedHashMap<>();
 
@@ -221,8 +220,8 @@ public class TestClass {
                 third.put("28","Industrial Use - Million tonnes");
                 third.put("10","Exports (NMY) - Million tonnes");
                 third.put("16","Closing Stocks - Million tonnes");
-                second.put("4",third);
-                result.put("CBS",second);
+                second.put("6",third);
+                result.put("IGC",second);
 
                 break;
 
@@ -233,8 +232,8 @@ public class TestClass {
                 third.put("37","Area Planted - Million Ha");
                 third.put("2","Area Harvested - Million Ha");
                 third.put("4","Yield - Tonnes/Ha");
-                second.put("4",third);
-                result.put("CBS",second);
+                second.put("6",third);
+                result.put("IGC",second);
                 break;
 
             case 3:
@@ -243,8 +242,8 @@ public class TestClass {
                 third.put("37","Area Planted - Million Ha");
                 third.put("2","Area Harvested - Million Ha");
                 third.put("4","Yield - Tonnes/Ha");
-                second.put("4",third);
-                result.put("CBS",second);
+                second.put("6",third);
+                result.put("IGC",second);
                 break;
         }
         return result;
@@ -254,18 +253,10 @@ public class TestClass {
 
         LinkedHashMap<String, LinkedHashMap<String, String>> result = new LinkedHashMap<>();
         LinkedHashMap<String, String> second = new LinkedHashMap<>();
+        second.put("2015/16","2016-03-01");
         second.put("2016/17","2016-01-01");
         result.put("Argentina",second);
-        result.put("Brazil1",second);
-        result.put("Brazil2",second);
-        result.put("Brazil3",second);
-        result.put("Brazil4",second);
-        result.put("Brazil5",second);
-        result.put("Brazil6", second);
-        result.put("Brazil7", second);
-        result.put("Brazil8", second);
-        result.put("Brazil9", second);
-        result.put("Brazil10", second);
+        result.put("Brazil",second);
         return result;
     }
 
@@ -276,19 +267,9 @@ public class TestClass {
         String[] list = {"July/June", "2015/16", "July 2015 to June 2016"};
         LinkedList<String> last = new LinkedList<>(Arrays.asList(list));
         third.put("Argentina",last);
-        third.put("Brazil1",last);
-        third.put("Brazil2",last);
-        third.put("Brazil3",last);
-        third.put("Brazil4",last);
-        third.put("Brazil5",last);
-        third.put("Brazil6", last);
-        third.put("Brazil7", last);
-        third.put("Brazil8", last);
-        third.put("Brazil9", last);
-        third.put("Brazil10", last);
-
-        second.put("4",third);
-        result.put("CBS",second);
+        third.put("Brazil",last);
+        second.put("6",third);
+        result.put("IGC",second);
         return result;
 
     }
@@ -300,18 +281,9 @@ public class TestClass {
         String[] list = {"July/June", "2015/16", "July 2015 to June 2016", "test"};
         LinkedList<String> last = new LinkedList<String>(Arrays.asList(list));
         third.put("Argentina",last);
-        third.put("Brazil1",last);
-        third.put("Brazil2",last);
-        third.put("Brazil3",last);
-        third.put("Brazil4",last);
-        third.put("Brazil5",last);
-        third.put("Brazil6", last);
-        third.put("Brazil7", last);
-        third.put("Brazil8", last);
-        third.put("Brazil9", last);
-        third.put("Brazil10", last);
-        second.put("4",third);
-        result.put("CBS",second);
+        third.put("Brazil",last);
+        second.put("6",third);
+        result.put("IGC",second);
         return result;
 
     }

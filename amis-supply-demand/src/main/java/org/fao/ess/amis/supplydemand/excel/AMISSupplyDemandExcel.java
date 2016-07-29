@@ -1140,18 +1140,19 @@ public class AMISSupplyDemandExcel {
             //FAO-CBS Rice Note
             if (qvo.getxLabel().equals("DATASOURCE")) {
                 if (AMISSupplyDemandUtils.itemsContainRice(qvo) && datasource.equals(AMISConstants.CBS.name())) {
-                    sheet.addMergedRegion(new CellRangeAddress(t, (short) 0, t, (short) 15));
+                    sheet.addMergedRegion(new CellRangeAddress(t,t, (short) 0,  (short) 15));
                     t = createInformationRow(t, sheet, workbook, CBS_RICE_NOTE, "", false, 0);
                 }
             } else if (qvo.getxLabel().equals("COUNTRY")) {
                 if (AMISSupplyDemandUtils.itemsContainRice(qvo) && qvo.getDatabases().containsKey(AMISConstants.CBS.name())) {
-                    sheet.addMergedRegion(new CellRangeAddress(t, (short) 0, t, (short) 15));
+                   // sheet.addMergedRegion(new CellRangeAddress(t, (short) 0, t, (short) 15));
+                    sheet.addMergedRegion(new CellRangeAddress(t,t, (short) 0,  (short) 15));
                     t = createInformationRow(t, sheet, workbook, CBS_RICE_NOTE, "", false, 0);
                 }
             } else if (qvo.getxLabel().equals("PRODUCT")) {
                 LOGGER.info("Rice has been selected " + AMISSupplyDemandUtils.itemsContainRice(qvo) + " | datasource = " + datasource);
                 if (country.contains("Rice") && qvo.getDatabases().containsKey(AMISConstants.CBS.name())) {
-                    sheet.addMergedRegion(new CellRangeAddress(t, (short) 0, t, (short) 15));
+                    sheet.addMergedRegion(new CellRangeAddress(t,t, (short) 0,  (short) 15));
                     t = createInformationRow(t, sheet, workbook, CBS_RICE_NOTE, "", false, 0);
                 }
             }
@@ -1215,8 +1216,9 @@ public class AMISSupplyDemandExcel {
         cell.setCellValue(header);
 
         cell = row.createCell((short) 1);
-        cell.setCellStyle(utils.getBoldTextCellStyleWithAlignment(workbook, null));
-
+        cell.setCellStyle(utils.getBoldTextCellStyle(workbook, (HSSFCellStyle) cell.getCellStyle()));
+        cell.getCellStyle().setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        cell.getCellStyle().setAlignment(HSSFCellStyle.ALIGN_CENTER);
         LOGGER.info("qvo.getCountriesInternationalTradeYear() " + qvo.getCountriesInternationalTradeYear());
 
         String productCode = "";

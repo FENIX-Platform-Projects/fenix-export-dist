@@ -52,6 +52,7 @@ public class AmisSupplyDemandExcelUtilsNew {
         styles.put("normalWithSmallBold", createNormalWithSmallBold(workbook));
         styles.put("normalWithItalic", createNormalWithItalic(workbook));
         styles.put("bigBold", createBigBold(workbook));
+        styles.put("normalBold",createBold(workbook));
         styles.put("italic", createItalic(workbook));
         styles.put("smallItalic", createSmallItalic(workbook));
         styles.put("smallGreyItalic", createSmallGreyItalic(workbook));
@@ -171,6 +172,12 @@ public class AmisSupplyDemandExcelUtilsNew {
         HSSFCellStyle cellStyle = workbook.createCellStyle();
         getBordersStyle(workbook, cellStyle);
         cellStyle.setFont(bigBoldFont);
+        return cellStyle;
+    }
+
+    private static HSSFCellStyle  createBold (HSSFWorkbook workbook) {
+        HSSFCellStyle cellStyle = workbook.createCellStyle();
+        cellStyle.setFont(boldFont);
         return cellStyle;
     }
 
@@ -407,6 +414,11 @@ public class AmisSupplyDemandExcelUtilsNew {
         return styles.get("bigBold");
     }
 
+    public static  HSSFCellStyle getNormalBoldCellStyle () {
+        return styles.get("normalBold");
+    }
+
+
     public static  HSSFCellStyle getItalicCellStyle () {
         return styles.get("italic");
     }
@@ -592,8 +604,8 @@ public class AmisSupplyDemandExcelUtilsNew {
         //Title Row
         rowCounter = createHeadingRow(rowCounter, sheet, workbook, title, null);
 
-        HSSFRow row = sheet.createRow(rowCounter++);
-        HSSFCell cell = row.createCell((short) 0);
+        Row row = sheet.createRow(rowCounter++);
+        HSSFCell cell = (HSSFCell) row.createCell((short) 0);
         cell.setCellStyle(getLeftAlignmentStyle());
         cell.setCellValue("No Data Available");
 
@@ -601,24 +613,24 @@ public class AmisSupplyDemandExcelUtilsNew {
     }
 
     public static int createHeadingRow(int rowCounter, HSSFSheet sheet, HSSFWorkbook workbook, String header, String headerValue) {
-        HSSFRow row = sheet.createRow(rowCounter++);
+        Row row = sheet.createRow(rowCounter++);
         // LOGGER.info("----------- createHeadingRow .... START ");
 
         if (header != null && headerValue == null) {
-            HSSFCell cell = row.createCell((short) 0);
-            cell.setCellStyle(getBigBoldTextCellStyle(workbook, null));
+            HSSFCell cell = (HSSFCell) row.createCell((short) 0);
+            cell.setCellStyle(getNormalBoldCellStyle());
             cell.setCellValue(header);
 
             row.createCell((short) 1).setCellValue("");
         } else {
             // LOGGER.info("----------- header  "+header);
 
-            HSSFCell cell = row.createCell((short) 0);
+            HSSFCell cell = (HSSFCell) row.createCell((short) 0);
             cell.setCellStyle(getRightAlignmentStyle());
             cell.setCellValue(header);
 
-            cell = row.createCell((short) 1);
-            cell.setCellStyle(getBoldTextCellStyle(workbook, null));
+            cell = (HSSFCell) row.createCell((short) 1);
+            cell.setCellStyle(getNormalBoldCellStyle());
             cell.setCellValue(headerValue);
         }
 
