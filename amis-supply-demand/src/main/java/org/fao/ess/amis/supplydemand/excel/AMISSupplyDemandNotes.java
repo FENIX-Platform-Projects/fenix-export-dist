@@ -94,7 +94,7 @@ public class AMISSupplyDemandNotes {
         LOGGER.info("createFootnote: 3 elementNotesMap = "+elementNotes);
 
         for(String element: elementNotes.keySet()){
-            sheet.addMergedRegion(new CellRangeAddress(t, (short) 0, t, (short) (2)));
+            sheet.addMergedRegion(new CellRangeAddress(t, t,(short) 0,  (short) (2)));
             createInformationRow(t, sheet,  workbook, element+" = "+elementNotes.get(element), "", true, 0, utils);
 
             t++;

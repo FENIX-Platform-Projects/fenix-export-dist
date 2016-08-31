@@ -12,6 +12,9 @@ import org.fao.ess.amis.supplydemand.dao.AMISQueryVO;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.*;
 
 public class AMISSupplyDemandExcel {
@@ -1040,8 +1043,15 @@ public class AMISSupplyDemandExcel {
 
 
                             cell.setCellType(Cell.CELL_TYPE_NUMERIC);
-                            cell.setCellValue(year.get(date).get(elementCode));
+                            if(FOOD_BALANCE_ELEMENTS_HIGHLIGHTED.contains(elementCode)){
+                                String valueHighlighted = (year.get(date).get(elementCode)!= null)?
+                                        new BigDecimal(year.get(date).get(elementCode)).setScale(2, RoundingMode.HALF_UP).toString():
+                                        String.valueOf(year.get(date).get(elementCode));
+                                cell.setCellValue(valueHighlighted);
 
+                            }else {
+                                cell.setCellValue(year.get(date).get(elementCode));
+                            }
                             //Population
                             if (elementCode.equals("1"))
                                 cell.getCellStyle().setDataFormat(df.getFormat("0")); //Round value
@@ -1084,9 +1094,7 @@ public class AMISSupplyDemandExcel {
                         }
                     } else {
                         // LOGGER.info(date+" NOT IN  year MAP %%  NULL %% ");
-                        CellStyle cellStyle = cell.getCellStyle();
-                        cell.setCellStyle(cellStyle);
-                        utils.getBasicWithBorders();
+                        cell.setCellStyle(utils.getBasicWithBorders());
                         cell.setCellValue("");
                     }
                 } else {

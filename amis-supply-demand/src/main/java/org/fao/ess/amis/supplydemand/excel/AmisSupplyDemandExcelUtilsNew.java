@@ -171,6 +171,7 @@ public class AmisSupplyDemandExcelUtilsNew {
     private static HSSFCellStyle  createBigBold (HSSFWorkbook workbook) {
         HSSFCellStyle cellStyle = workbook.createCellStyle();
         getBordersStyle(workbook, cellStyle);
+        cellStyle.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
         cellStyle.setFont(bigBoldFont);
         return cellStyle;
     }
