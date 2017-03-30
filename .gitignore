@@ -1,6 +1,7 @@
-.idea/
-/target/
-/survey-export/target/
-/hq-dist/target/
-*.iml
+/.idea/
 *.class
+*.iml
+*/target
+*.jar
+*.war
+**/.DS_Store
